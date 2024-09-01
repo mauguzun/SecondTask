@@ -17,12 +17,12 @@ namespace SecondTask.Infrastructure.DbContext
                 .HasMaxLength(2);
                 
             modelBuilder.Entity<Location>()
-                .Property(i => i.Name)
+                .Property(i => i.CityName)
                 .HasMaxLength(50);
             
-            modelBuilder.Entity<WeatherData>()
-                .Property(i => i.Temperature)
-                .HasPrecision(5, 2); 
+            // modelBuilder.Entity<WeatherData>()
+            //     .Property(i => i.TemperatureInCelsius)
+            //     .HasPrecision(3, 2);  for test 
         }
     }
 }

@@ -3,8 +3,8 @@ using TestTask.Domain.Entites;
 namespace SecondTask.Infrastructure.Inerfaces.Repositories;
 public interface IGenericRepository<TEntity> where TEntity : Entity
 {
-    Task AddAsync(TEntity entity);
-    Task<List<TEntity>> GetAsync();
-    Task<TEntity?> GetByAsync(int id);
-    Task SaveChangesAsync();
+    Task AddRangeAsync(List<TEntity> entities,CancellationToken cancellationToken);
+    Task<List<TEntity>> GetAsync(CancellationToken cancellationToken);
+    Task<TEntity?> GetByAsync(int id,CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

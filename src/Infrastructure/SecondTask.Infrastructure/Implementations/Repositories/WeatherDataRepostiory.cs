@@ -1,17 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using SecondTask.Infrastructure.DbContext;
+using SecondTask.Infrastructure.Inerfaces.Repositories;
 using TestTask.Domain.Entites;
 
 namespace SecondTask.Infrastructure.Implementations.Repositories;
 
-public class WeatherDataRepostiory : GenericRepository<WeatherData>
+public class WeatherDataRepostiory : GenericRepository<WeatherData>, IWeatherDataRepostiory
 {
-    public WeatherDataRepostiory(ApplicationDbContext dbContext) : base(dbContext)
-    {
-    }
+    private const int MaxLogPerRequest = 1000;
+    public WeatherDataRepostiory(ApplicationDbContext dbContext) : base(dbContext){}
 
-    public async Task<List<WeatherData>> GetAsync()=>
+    public new async Task<List<WeatherData>> GetAsync(CancellationToken cancellationToken) =>
         await DbContext.WeatherData
-            .Include(w => w.Location) 
-            .ToListAsync();
+            .Include(w => w.Location)
+            .OrderBy(w => w.Timestamp)
+            .Take(MaxLogPerRequest)
+            .ToListAsync(cancellationToken);
 }

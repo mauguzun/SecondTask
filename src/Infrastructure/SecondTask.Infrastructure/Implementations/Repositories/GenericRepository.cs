@@ -10,8 +10,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     protected  ApplicationDbContext DbContext { get; }
     protected GenericRepository(ApplicationDbContext dbContext) => DbContext = dbContext;
    
-    public async Task AddAsync(TEntity entity)=> await DbContext.Set<TEntity>().AddAsync(entity);
-    public async Task<List<TEntity>> GetAsync() => await DbContext.Set<TEntity>().ToListAsync();
-    public async Task<TEntity?> GetByAsync(int id)=> await DbContext.Set<TEntity>().FindAsync(id);
-    public async Task SaveChangesAsync() => await DbContext.SaveChangesAsync();
+    public async Task AddRangeAsync(List<TEntity> entities,CancellationToken cancellationToken)
+        => await DbContext.Set<TEntity>().AddRangeAsync(entities,cancellationToken);
+    public async Task<List<TEntity>> GetAsync(CancellationToken cancellationToken) 
+        => await DbContext.Set<TEntity>().ToListAsync(cancellationToken);
+    public async Task<TEntity?> GetByAsync(int id,CancellationToken cancellationToken)=> 
+        await DbContext.Set<TEntity>().FindAsync(id,cancellationToken);
+    public async Task SaveChangesAsync(CancellationToken cancellationToken) => await DbContext.SaveChangesAsync(cancellationToken);
 }
