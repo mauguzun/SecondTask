@@ -1,0 +1,19 @@
+version: '2.12.2'
+
+services:
+
+  deleter:
+    image: alpine
+    command: rm -rf postgres
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres  
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: weather
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./public.sql:/docker-entrypoint-initdb.d/public.sql

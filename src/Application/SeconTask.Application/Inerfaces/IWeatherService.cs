@@ -1,12 +1,10 @@
-﻿using TestTask.Domain.Entites;
-using TestTask.Domain.Responses;
+﻿using TestTask.Domain.Responses;
 
-namespace TestTask.Application.Inerfaces
+namespace TestTask.Application.Inerfaces;
+
+public interface IWeatherService
 {
-    public interface IWeatherService
-    {
-        Task FetchAndStoreWeatherDataAsync(CancellationToken cancellationToken);
+    Task FetchAndStoreWeatherDataAsync(CancellationToken cancellationToken);
 
-        Task<List<WeatherDataResponse>> GetWeatherLogsAsync(CancellationToken cancellationToken);
-    }
+    Task<List<WeatherDataResponse>> GetWeatherLogsAsync(CancellationToken cancellationToken);
 }

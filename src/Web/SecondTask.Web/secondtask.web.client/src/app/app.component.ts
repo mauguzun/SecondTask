@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { WeatherDataResponse } from '../models/WeatherDataResponse';
-import { WeatherService } from '../services/weatherService';
-import { EChartsOption, SeriesOption } from 'echarts/types/dist/echarts';
-import { DatePipe } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {WeatherDataResponse} from '../models/WeatherDataResponse';
+import {WeatherService} from '../services/weatherService';
+import {EChartsOption, SeriesOption} from 'echarts/types/dist/echarts';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +13,10 @@ export class AppComponent implements OnInit {
 
   isLoading = true;
   options: EChartsOption | null = null;
+  title = 'secondtask.web.client';
 
-  constructor(private weatherService: WeatherService, private datePipe: DatePipe) { }
+  constructor(private weatherService: WeatherService, private datePipe: DatePipe) {
+  }
 
   ngOnInit() {
     this.getForecasts();
@@ -35,7 +36,6 @@ export class AppComponent implements OnInit {
   private _mapData(weatherData: WeatherDataResponse[]) {
 
     this.isLoading = false;
-    ;
 
 
     const legends = Array.from(new Set(weatherData.map(x => this._locationDisplay(x))));
@@ -79,5 +79,4 @@ export class AppComponent implements OnInit {
       animationDelayUpdate: idx => idx * 5,
     };
   }
-  title = 'secondtask.web.client';
 }

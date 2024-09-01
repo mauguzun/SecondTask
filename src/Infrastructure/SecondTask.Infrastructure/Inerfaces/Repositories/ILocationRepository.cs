@@ -4,5 +4,4 @@ namespace SecondTask.Infrastructure.Inerfaces.Repositories;
 
 public interface ILocationRepository : IGenericRepository<Location>
 {
-    
 }
