@@ -18,10 +18,12 @@ namespace SecondTask.Web.Server
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
             //Repositories
             builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -66,12 +68,24 @@ namespace SecondTask.Web.Server
        
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
             });
-            
-            
-            builder.Services.AddHangfire(configuration => configuration
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseMemoryStorage()).AddHangfireServer();
+
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("localhost", builder =>
+                {
+                    builder
+                        .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+
+            //builder.Services.AddHangfire(configuration => configuration
+            //    .UseSimpleAssemblyNameTypeSerializer()
+            //    .UseRecommendedSerializerSettings()
+            //    .UseMemoryStorage()).AddHangfireServer();
 
             var app = builder.Build();
 
@@ -89,17 +103,19 @@ namespace SecondTask.Web.Server
 
             app.UseAuthorization();
             
-            app.UseHangfireDashboard(); // for some reason 
+            //app.UseHangfireDashboard(); // for some reason 
 
             app.MapControllers();
-            //
-            // RecurringJob.AddOrUpdate(
-            //     recurringJobId: "FetchWeatherData",
-            //     methodCall: (IWeatherService x) => x.FetchAndStoreWeatherDataAsync(default(CancellationToken)),
-            //     cronExpression: Cron.Minutely,
-            //     options: new RecurringJobOptions()
-            // );
-            
+
+            //RecurringJob.AddOrUpdate(
+            //    recurringJobId: "FetchWeatherData",
+            //    methodCall: (IWeatherService x) => x.FetchAndStoreWeatherDataAsync(default(CancellationToken)),
+            //    cronExpression: Cron.Minutely,
+            //    options: new RecurringJobOptions()
+            //);
+
+
+            app.UseCors("localhost");
             app.MapFallbackToFile("/index.html");
 
             app.Run();
