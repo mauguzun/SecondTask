@@ -101,12 +101,12 @@ public class Program
         app.UseHangfireDashboard();
         app.MapControllers();
 
-        //RecurringJob.AddOrUpdate(
-        //    recurringJobId: "FetchWeatherData",
-        //    methodCall: (IWeatherService x) => x.FetchAndStoreWeatherDataAsync(default(CancellationToken)),
-        //    cronExpression: Cron.Minutely,
-        //    options: new RecurringJobOptions()
-        //);
+        RecurringJob.AddOrUpdate(
+            recurringJobId: "FetchWeatherData",
+            methodCall: (IWeatherService x) => x.FetchAndStoreWeatherDataAsync(default),
+            cronExpression: Cron.Minutely,
+            options: new RecurringJobOptions()
+        );
 
         app.UseCors("localhost");
         app.MapFallbackToFile("/index.html");
